@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class ProductRecord {
-    private String name;
-    private Category category;
-    private UUID uuid;
+    private final String name;
+    private final Category category;
+    private final UUID uuid;
     private BigDecimal price;
 
     public ProductRecord(UUID uuid, String name, Category category, BigDecimal price) {

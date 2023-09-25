@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Category {
     private final String name;
-    private static Map<String, Category> categoryList = new HashMap<>();
+    private static final Map<String, Category> categoryList = new HashMap<>();
 
     private Category(String name) {
         this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
@@ -22,13 +22,12 @@ public class Category {
             category = new Category(name);
             categoryList.put(name, category);
         }
+        categoryList.put(name, category);
         return category;
     }
 
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
 
 }
