@@ -11,23 +11,15 @@ public class Category {
         this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
-
     public static Category of(String name) {
         if (name == null)
             throw new IllegalArgumentException("Category name can't be null");
 
-        Category category = categoryList.get(name);
-
-        if (category == null) {
-            category = new Category(name);
-            categoryList.put(name, category);
-        }
-        categoryList.put(name, category);
-        return category;
+        return categoryList.computeIfAbsent(name, Category::new);
     }
-
 
     public String getName() {return name;}
 
 
 }
+

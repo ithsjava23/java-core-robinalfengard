@@ -17,10 +17,8 @@ public class Warehouse {
 
     private Warehouse() {}
 
-    // getInstance with name var
     public static Warehouse getInstance(String name) {return new Warehouse(name);}
 
-    // getInstance without name var
     public static Warehouse getInstance() {return new Warehouse();}
 
 
@@ -57,12 +55,18 @@ public class Warehouse {
 
     public List<ProductRecord> getProducts() {return List.copyOf(this.products);}
 
+
     public void updateProductPrice(UUID uuid, BigDecimal bigDecimal) {
-        if (getProductById(uuid).isPresent()) {
-            ProductRecord product = getProductById(uuid).get();
+        Optional<ProductRecord> productToChange = getProductById(uuid);
+
+        productToChange.ifPresent(product -> {
             product.setPrice(bigDecimal);
             changedProducts.add(product);
-        } else throw new IllegalArgumentException("Product with that id doesn't exist.");
+        });
+
+        if(productToChange.isEmpty())
+            throw  new IllegalArgumentException("Product with that id doesn't exist.");
+
     }
 
     public List<ProductRecord> getProductsBy(Category category) {
@@ -75,35 +79,14 @@ public class Warehouse {
         return List.copyOf(changedProducts);
     }
 
-    public Map<Category, List<ProductRecord>> getProductsGroupedByCategories() {
-        Map<Category, List<ProductRecord>> sortedByCategory = new HashMap<>();
-        for (ProductRecord product : products) {
-            sortedByCategory.computeIfAbsent(product.category(), k -> new ArrayList<>()).add(product);
-        }
-        return sortedByCategory;
+    public Map<Category, List<ProductRecord>> getProductsGroupedByCategories(){
+        return products.stream()
+                .collect(Collectors.groupingBy(
+                        ProductRecord::category
+                        ));
     }
 
     public boolean isEmpty() {return products.isEmpty();}
 
 
-    // Override methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Warehouse warehouse)) return false;
-        return Objects.equals(name, warehouse.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    @Override
-    public String toString() {
-        return "Warehouse{" +
-                "name='" + name + '\'' +
-                ", products=" + products +
-                '}';
-    }
 }

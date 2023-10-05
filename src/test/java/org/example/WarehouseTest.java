@@ -84,7 +84,6 @@ class WarehouseTest {
             assertThat(warehouse.getProducts()).isEmpty();
         }
 
-
     }
 
     @Nested
